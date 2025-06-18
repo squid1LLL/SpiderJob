@@ -6,21 +6,21 @@ import pandas as pd
 from utils.logger import logger
 
 class DataCleaner:
-    """Êı¾İÇåÏ´Àà£¬¸ºÔğ´¦ÀíºÍ¹æ·¶»¯ÅÀÈ¡µÄÊı¾İ"""
+    """æ•°æ®æ¸…æ´—ç±»ï¼Œè´Ÿè´£å¤„ç†å’Œè§„èŒƒåŒ–çˆ¬å–çš„æ•°æ®"""
     
     @staticmethod
     def clean_job_data(job_data):
         """
-        ÇåÏ´Ö°Î»Êı¾İ
+        æ¸…æ´—èŒä½æ•°æ®
         
         Args:
-            job_data: Ô­Ê¼Ö°Î»Êı¾İÁĞ±í£¨ÁĞ±íÄÚ×Öµä£©
+            job_data: åŸå§‹èŒä½æ•°æ®åˆ—è¡¨ï¼ˆåˆ—è¡¨å†…å­—å…¸ï¼‰
             
         Returns:
-            list: ÇåÏ´ºóµÄÖ°Î»Êı¾İÁĞ±í£¨×ÖµäÁĞ±í£©
+            list: æ¸…æ´—åçš„èŒä½æ•°æ®åˆ—è¡¨ï¼ˆå­—å…¸åˆ—è¡¨ï¼‰
         """
         if not job_data:
-            logger.warning("Ã»ÓĞÊı¾İĞèÒªÇåÏ´")
+            logger.warning("æ²¡æœ‰æ•°æ®éœ€è¦æ¸…æ´—")
             return []
         
         cleaned_data = []
@@ -30,39 +30,39 @@ class DataCleaner:
             try:
                 cleaned_job = {}
                 
-                # Ö°Î»Ãû³Æ
-                cleaned_job["Ö°Î»Ãû³Æ"] = DataCleaner._clean_job_title(job.get("Ö°Î»Ãû³Æ", ""))
+                # èŒä½åç§°
+                cleaned_job["èŒä½åç§°"] = DataCleaner._clean_job_title(job.get("èŒä½åç§°", ""))
                 
-                # ¹«Ë¾Ãû³Æ
-                cleaned_job["¹«Ë¾Ãû³Æ"] = DataCleaner._clean_company_name(job.get("¹«Ë¾Ãû³Æ", ""))
+                # å…¬å¸åç§°
+                cleaned_job["å…¬å¸åç§°"] = DataCleaner._clean_company_name(job.get("å…¬å¸åç§°", ""))
                 
-                # Ğ½×Ê
-                salary_raw = job.get("Ğ½×Ê", "")
-                cleaned_job["Ğ½×Ê"] = DataCleaner._clean_salary(salary_raw)
+                # è–ªèµ„
+                salary_raw = job.get("è–ªèµ„", "")
+                cleaned_job["è–ªèµ„"] = DataCleaner._clean_salary(salary_raw)
                 
-                # ÌáÈ¡Ğ½×Ê·¶Î§£¨µ¥Î»K£©
+                # æå–è–ªèµ„èŒƒå›´ï¼ˆå•ä½Kï¼‰
                 salary_range = DataCleaner._extract_salary_range(salary_raw)
                 if salary_range:
-                    cleaned_job["×îµÍĞ½×Ê(K)"] = salary_range[0]
-                    cleaned_job["×î¸ßĞ½×Ê(K)"] = salary_range[1]
-                    cleaned_job["Æ½¾ùĞ½×Ê(K)"] = (salary_range[0] + salary_range[1]) / 2
+                    cleaned_job["æœ€ä½è–ªèµ„(K)"] = salary_range[0]
+                    cleaned_job["æœ€é«˜è–ªèµ„(K)"] = salary_range[1]
+                    cleaned_job["å¹³å‡è–ªèµ„(K)"] = (salary_range[0] + salary_range[1]) / 2
                 else:
-                    cleaned_job["×îµÍĞ½×Ê(K)"] = None
-                    cleaned_job["×î¸ßĞ½×Ê(K)"] = None
-                    cleaned_job["Æ½¾ùĞ½×Ê(K)"] = None
+                    cleaned_job["æœ€ä½è–ªèµ„(K)"] = None
+                    cleaned_job["æœ€é«˜è–ªèµ„(K)"] = None
+                    cleaned_job["å¹³å‡è–ªèµ„(K)"] = None
                 
-                # ¹¤×÷µØµã£¬È¥µô¡¸¡¹ºÍÖĞµã£¬Í³Ò»Îª¶ººÅ·Ö¸ô
-                location_raw = job.get("¹¤×÷µØµã", "")
-                cleaned_job["¹¤×÷µØµã"] = DataCleaner._clean_location(location_raw)
+                # å·¥ä½œåœ°ç‚¹ï¼Œå»æ‰ã€Œã€å’Œä¸­ç‚¹ï¼Œç»Ÿä¸€ä¸ºé€—å·åˆ†éš”
+                location_raw = job.get("å·¥ä½œåœ°ç‚¹", "")
+                cleaned_job["å·¥ä½œåœ°ç‚¹"] = DataCleaner._clean_location(location_raw)
                 
-                # Ò³Âë
-                cleaned_job["Ò³Âë"] = job.get("Ò³Âë", None)
+                # é¡µç 
+                cleaned_job["é¡µç "] = job.get("é¡µç ", None)
                 
                 cleaned_data.append(cleaned_job)
             except Exception as e:
-                logger.error(f"ÇåÏ´µÚ{idx}ÌõÊı¾İÒì³£: {e}")
+                logger.error(f"æ¸…æ´—ç¬¬{idx}æ¡æ•°æ®å¼‚å¸¸: {e}")
         
-        logger.info(f"Êı¾İÇåÏ´Íê³É£¬´¦ÀíÁË {len(cleaned_data)} Ìõ¼ÇÂ¼")
+        logger.info(f"æ•°æ®æ¸…æ´—å®Œæˆï¼Œå¤„ç†äº† {len(cleaned_data)} æ¡è®°å½•")
         return cleaned_data
     
     @staticmethod
@@ -91,22 +91,22 @@ class DataCleaner:
     def _clean_location(location):
         if not location:
             return ""
-        # È¥³ıÖĞÀ¨ºÅºÍÌØÊâ×Ö·û£¬Ìæ»» ¡¤ »ò ¡¢ Îª¶ººÅ
-        loc = re.sub(r'[¡¸¡¹\[\]]', '', location)
-        loc = re.sub(r'[¡¤¡¢]', ',', loc)
+        # å»é™¤ä¸­æ‹¬å·å’Œç‰¹æ®Šå­—ç¬¦ï¼Œæ›¿æ¢ Â· æˆ– ã€ ä¸ºé€—å·
+        loc = re.sub(r'[ã€Œã€\[\]]', '', location)
+        loc = re.sub(r'[Â·ã€]', ',', loc)
         loc = loc.strip()
         return loc
     
     @staticmethod
     def _extract_salary_range(salary_str):
         """
-        ´ÓĞ½×Ê×Ö·û´®ÖĞÌáÈ¡Ğ½×Ê·¶Î§£¬µ¥Î»Í³Ò»×ªÎªK
+        ä»è–ªèµ„å­—ç¬¦ä¸²ä¸­æå–è–ªèµ„èŒƒå›´ï¼Œå•ä½ç»Ÿä¸€è½¬ä¸ºK
         
-        Ö§³Ö¸ñÊ½Ê¾Àı£º
-        - 6000-12000Ôª¡¤13Ğ½  -> ×ªÎª6-12K
-        - 1.1-1.3Íò         -> 11-13K
-        - 150-200Ôª/Ìì      -> ·µ»ØNone£¨ÒòÎªµ¥Î»²»Í¬£¬Ôİ²»´¦Àí£©
-        - ÃæÒé              -> ·µ»ØNone
+        æ”¯æŒæ ¼å¼ç¤ºä¾‹ï¼š
+        - 6000-12000å…ƒÂ·13è–ª  -> è½¬ä¸º6-12K
+        - 1.1-1.3ä¸‡         -> 11-13K
+        - 150-200å…ƒ/å¤©      -> è¿”å›Noneï¼ˆå› ä¸ºå•ä½ä¸åŒï¼Œæš‚ä¸å¤„ç†ï¼‰
+        - é¢è®®              -> è¿”å›None
         
         Returns:
             tuple or None: (min_salary_k, max_salary_k)
@@ -116,30 +116,30 @@ class DataCleaner:
         
         salary_str = salary_str.lower()
         
-        # Èç¹ûÊÇ¡°ÃæÒé¡±»òÎŞÊı×Ö£¬Ö±½Ó·µ»ØNone
-        if any(x in salary_str for x in ["ÃæÒé", "²»ÏŞ", "´ı¶¨", "negotiable"]):
+        # å¦‚æœæ˜¯â€œé¢è®®â€æˆ–æ— æ•°å­—ï¼Œç›´æ¥è¿”å›None
+        if any(x in salary_str for x in ["é¢è®®", "ä¸é™", "å¾…å®š", "negotiable"]):
             return None
         
-        # ÈÕĞ½»òĞ¡Ê±Ğ½²»´¦Àí
-        if re.search(r'[Ôª¿é]/(Ìì|Ğ¡Ê±|Ê±)', salary_str):
+        # æ—¥è–ªæˆ–å°æ—¶è–ªä¸å¤„ç†
+        if re.search(r'[å…ƒå—]/(å¤©|å°æ—¶|æ—¶)', salary_str):
             return None
         
-        # ´¦ÀíÔÂĞ½´ø¡°Ôª¡±µ¥Î»£¬×ªÎªÇ§Ôªµ¥Î»
-        match_yuan = re.match(r'(\d+)[-~](\d+)Ôª', salary_str)
+        # å¤„ç†æœˆè–ªå¸¦â€œå…ƒâ€å•ä½ï¼Œè½¬ä¸ºåƒå…ƒå•ä½
+        match_yuan = re.match(r'(\d+)[-~](\d+)å…ƒ', salary_str)
         if match_yuan:
             min_val = float(match_yuan.group(1)) / 1000
             max_val = float(match_yuan.group(2)) / 1000
             return (min_val, max_val)
         
-        # ´¦Àí´ø¡°Íò¡±µ¥Î»µÄÔÂĞ½£¬Èç 1.1-1.3Íò£¬×ªÎª 11-13K
-        match_wan = re.match(r'(\d+\.?\d*)[-~](\d+\.?\d*)Íò', salary_str)
+        # å¤„ç†å¸¦â€œä¸‡â€å•ä½çš„æœˆè–ªï¼Œå¦‚ 1.1-1.3ä¸‡ï¼Œè½¬ä¸º 11-13K
+        match_wan = re.match(r'(\d+\.?\d*)[-~](\d+\.?\d*)ä¸‡', salary_str)
         if match_wan:
             min_val = float(match_wan.group(1)) * 10
             max_val = float(match_wan.group(2)) * 10
             return (min_val, max_val)
         
-        # ´¦Àí´ø¡°k¡±»ò¡°Ç§¡±µÄÔÂĞ½£¬Èç 6k-12k »ò 6K-12K
-        match_k = re.match(r'(\d+\.?\d*)[kÇ§]?[-~](\d+\.?\d*)[kÇ§]?', salary_str)
+        # å¤„ç†å¸¦â€œkâ€æˆ–â€œåƒâ€çš„æœˆè–ªï¼Œå¦‚ 6k-12k æˆ– 6K-12K
+        match_k = re.match(r'(\d+\.?\d*)[kåƒ]?[-~](\d+\.?\d*)[kåƒ]?', salary_str)
         if match_k:
             min_val = float(match_k.group(1))
             max_val = float(match_k.group(2))
@@ -150,30 +150,30 @@ class DataCleaner:
     @staticmethod
     def analyze_data(df):
         """
-        ·ÖÎöÇåÏ´ºóµÄÊı¾İ£¬Éú³ÉÍ³¼ÆĞÅÏ¢
+        åˆ†ææ¸…æ´—åçš„æ•°æ®ï¼Œç”Ÿæˆç»Ÿè®¡ä¿¡æ¯
         
         Args:
             df: pandas DataFrame
             
         Returns:
-            dict: Í³¼ÆĞÅÏ¢
+            dict: ç»Ÿè®¡ä¿¡æ¯
         """
         stats = {}
         try:
-            stats["×ÜÖ°Î»Êı"] = len(df)
-            if "Æ½¾ùĞ½×Ê(K)" in df.columns:
-                stats["Æ½¾ùĞ½×Ê(K)"] = round(df["Æ½¾ùĞ½×Ê(K)"].dropna().mean(), 2)
-                stats["×î¸ßĞ½×Ê(K)"] = round(df["×î¸ßĞ½×Ê(K)"].dropna().max(), 2)
-                stats["×îµÍĞ½×Ê(K)"] = round(df["×îµÍĞ½×Ê(K)"].dropna().min(), 2)
+            stats["æ€»èŒä½æ•°"] = len(df)
+            if "å¹³å‡è–ªèµ„(K)" in df.columns:
+                stats["å¹³å‡è–ªèµ„(K)"] = round(df["å¹³å‡è–ªèµ„(K)"].dropna().mean(), 2)
+                stats["æœ€é«˜è–ªèµ„(K)"] = round(df["æœ€é«˜è–ªèµ„(K)"].dropna().max(), 2)
+                stats["æœ€ä½è–ªèµ„(K)"] = round(df["æœ€ä½è–ªèµ„(K)"].dropna().min(), 2)
             
-            if "¹«Ë¾Ãû³Æ" in df.columns:
-                stats["¹«Ë¾ÊıÁ¿"] = df["¹«Ë¾Ãû³Æ"].nunique()
-                stats["ÕĞÆ¸Ö°Î»×î¶àµÄ¹«Ë¾"] = df["¹«Ë¾Ãû³Æ"].value_counts().head(5).to_dict()
+            if "å…¬å¸åç§°" in df.columns:
+                stats["å…¬å¸æ•°é‡"] = df["å…¬å¸åç§°"].nunique()
+                stats["æ‹›è˜èŒä½æœ€å¤šçš„å…¬å¸"] = df["å…¬å¸åç§°"].value_counts().head(5).to_dict()
             
-            if "¹¤×÷µØµã" in df.columns:
-                stats["Ö°Î»×î¶àµÄµØÇø"] = df["¹¤×÷µØµã"].value_counts().head(5).to_dict()
+            if "å·¥ä½œåœ°ç‚¹" in df.columns:
+                stats["èŒä½æœ€å¤šçš„åœ°åŒº"] = df["å·¥ä½œåœ°ç‚¹"].value_counts().head(5).to_dict()
             
-            logger.info("Êı¾İ·ÖÎöÍê³É")
+            logger.info("æ•°æ®åˆ†æå®Œæˆ")
         except Exception as e:
-            logger.error(f"Êı¾İ·ÖÎö³ö´í: {e}")
+            logger.error(f"æ•°æ®åˆ†æå‡ºé”™: {e}")
         return stats

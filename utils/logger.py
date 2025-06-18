@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-ÈÕÖ¾¹¤¾ßÄ£¿é£¬Ìá¹©Í³Ò»µÄÈÕÖ¾¼ÇÂ¼¹¦ÄÜ
+æ—¥å¿—å·¥å…·æ¨¡å—ï¼Œæä¾›ç»Ÿä¸€çš„æ—¥å¿—è®°å½•åŠŸèƒ½
 """
 
 import os
@@ -12,7 +12,7 @@ import colorlog
 import sys
 from datetime import datetime
 
-# ÈÕÖ¾ÑÕÉ«ÅäÖÃ
+# æ—¥å¿—é¢œè‰²é…ç½®
 log_colors_config = {
     'DEBUG': 'cyan',
     'INFO': 'green',
@@ -24,26 +24,26 @@ log_colors_config = {
 class Logger:
     def __init__(self, log_name='recruitment_crawler'):
         """
-        ³õÊ¼»¯ÈÕÖ¾¼ÇÂ¼Æ÷
+        åˆå§‹åŒ–æ—¥å¿—è®°å½•å™¨
         
         Args:
-            log_name: ÈÕÖ¾Ãû³Æ
+            log_name: æ—¥å¿—åç§°
         """
-        # ´´½¨ÈÕÖ¾Ä¿Â¼
+        # åˆ›å»ºæ—¥å¿—ç›®å½•
         log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'logs')
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
             
-        # ÈÕÖ¾ÎÄ¼şÂ·¾¶
+        # æ—¥å¿—æ–‡ä»¶è·¯å¾„
         log_file = os.path.join(log_dir, f'{log_name}_{datetime.now().strftime("%Y%m%d")}.log')
         
-        # ´´½¨ÈÕÖ¾¼ÇÂ¼Æ÷
+        # åˆ›å»ºæ—¥å¿—è®°å½•å™¨
         self.logger = logging.getLogger(log_name)
         self.logger.setLevel(logging.DEBUG)
         
-        # ±ÜÃâÖØ¸´Ìí¼Ó´¦ÀíÆ÷
+        # é¿å…é‡å¤æ·»åŠ å¤„ç†å™¨
         if not self.logger.handlers:
-            # ¿ØÖÆÌ¨´¦ÀíÆ÷£¨´øÑÕÉ«£©
+            # æ§åˆ¶å°å¤„ç†å™¨ï¼ˆå¸¦é¢œè‰²ï¼‰
             console_handler = colorlog.StreamHandler(sys.stdout)
             console_handler.setLevel(logging.INFO)
             console_formatter = colorlog.ColoredFormatter(
@@ -54,7 +54,7 @@ class Logger:
             console_handler.setFormatter(console_formatter)
             self.logger.addHandler(console_handler)
             
-            # ÎÄ¼ş´¦ÀíÆ÷
+            # æ–‡ä»¶å¤„ç†å™¨
             file_handler = RotatingFileHandler(
                 filename=log_file,
                 maxBytes=10*1024*1024,  # 10MB
@@ -70,24 +70,24 @@ class Logger:
             self.logger.addHandler(file_handler)
     
     def debug(self, message):
-        """¼ÇÂ¼µ÷ÊÔÈÕÖ¾"""
+        """è®°å½•è°ƒè¯•æ—¥å¿—"""
         self.logger.debug(message)
     
     def info(self, message):
-        """¼ÇÂ¼ĞÅÏ¢ÈÕÖ¾"""
+        """è®°å½•ä¿¡æ¯æ—¥å¿—"""
         self.logger.info(message)
     
     def warning(self, message):
-        """¼ÇÂ¼¾¯¸æÈÕÖ¾"""
+        """è®°å½•è­¦å‘Šæ—¥å¿—"""
         self.logger.warning(message)
     
     def error(self, message):
-        """¼ÇÂ¼´íÎóÈÕÖ¾"""
+        """è®°å½•é”™è¯¯æ—¥å¿—"""
         self.logger.error(message)
     
     def critical(self, message):
-        """¼ÇÂ¼ÑÏÖØ´íÎóÈÕÖ¾"""
+        """è®°å½•ä¸¥é‡é”™è¯¯æ—¥å¿—"""
         self.logger.critical(message)
 
-# ´´½¨È«¾ÖÈÕÖ¾ÊµÀı
+# åˆ›å»ºå…¨å±€æ—¥å¿—å®ä¾‹
 logger = Logger().logger

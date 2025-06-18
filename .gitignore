@@ -1,0 +1,10 @@
+# 忽略虚拟环境目录（根据你的虚拟环境名字修改）
+Sp/
+
+# 忽略 Python 编译缓存
+__pycache__/
+*.pyc
+
+# 忽略输出数据和 Excel 文件
+data/output/
+*.xlsx
