@@ -134,3 +134,29 @@ class BrowserManager:
                 logger.warning(f"⚠️ 浏览器关闭异常: {e}")
             finally:
                 self.driver = None
+    @staticmethod
+    def create_with_proxy_retry(max_retries=5, browser_type=None, headless=None, enable_images=False):
+        """
+        从本地代理池中尝试多次创建浏览器
+        """
+        proxy_pool = ProxyPoolManager()
+        last_error = None
+
+        for attempt in range(max_retries):
+            proxy = proxy_pool.get_random_proxy()
+            if not proxy:
+                logger.warning("⚠️ 没有可用代理")
+                break
+
+            logger.info(f"🔁 第 {attempt + 1}/{max_retries} 次尝试，使用代理: {proxy}")
+            try:
+                bm = BrowserManager(browser_type=browser_type, headless=headless, enable_images=enable_images, proxy=proxy)
+                bm.create_browser()
+                return bm
+            except WebDriverException as e:
+                logger.warning(f"❌ 创建失败，移除代理 {proxy}：{e}")
+                proxy_pool.remove_proxy(proxy)
+                last_error = e
+
+        raise RuntimeError(f"❌ 所有代理均失败，最后错误：{last_error}")
+    
